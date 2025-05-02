@@ -1,5 +1,13 @@
 package src.Controller;
-import src.Model.Hotel; 
+
+import src.Model.Hotel;
+import src.Model.Client;
+import src.Model.Client;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import src.Config.db; // Importation de la classe db pour accéder à la base de données
 
 public class ClientController {
     private Hotel hotel; // Référence à l'hôtel
@@ -9,12 +17,51 @@ public class ClientController {
         this.hotel = hotel;
     }
 
-    // Méthode pour ajouter un client
-  
+    // Méthode pour créer un client
+    public static Client createClient(int hotelId,String nom, String prenom, String email, String telephone) {
+        int id = db.getInstance().clients.size(); // ID du client
+        Client client = new Client(id,hotelId, nom, prenom, email, telephone); // Création du client
+        db.getInstance().clients.add(client); // Ajout du client à la liste des clients
+        return db.getInstance().clients.get(id); // Retourne le client créé
+    }
 
-    // Méthode pour ajouter une réservation
+    // Méthode pour obtenir un client par son ID
+    public static Client getClient(int id) {
+        if (id < 0 || id >= db.getInstance().clients.size()) { 
+            System.out.println("Client ID " + id + " not found.");
+            return null; // Retourne null si l'ID est invalide
+        }
+        return db.getInstance().clients.get(id); 
+    }
+
+    public static List<Client> getClientsByHotelId(int hotelId) {
+        List<Client> allClients = db.getInstance().clients;
+        List<Client> result = new ArrayList<>();
+
+        for (Client Client : allClients) {
+            if (Client.getHotelId() == hotelId) {
+                result.add(Client);
+            }
+        }
+
+        return result;
+    }
+
+    // Méthode pour mettre à jour un client
+    public static Client updateClient(int id, String nom, String prenom, String email, String telephone) {
+       Client client = db.getInstance().clients.get(id); 
+       client.setNom(nom); 
+       client.setPrenom(prenom); 
+       client.setEmail(email); 
+       client.setTelephone(telephone); 
+       return client; 
+    }
+    public static String deleteClient(int id) {
+        Client client = db.getInstance().clients.remove(id);
+        return "Clint id: " + client.getId() + " deleted successfully"; 
+    }
     
 
-   
-   
+    
+
 }

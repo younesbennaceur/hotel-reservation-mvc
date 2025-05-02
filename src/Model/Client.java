@@ -5,7 +5,8 @@ import java.util.List;
 
 
 public class Client {
-    private String id; 
+    private int id; 
+    private int HotelID; // ID de l'hôtel auquel le client est associé
     private String nom;
     private String prenom;
     private String email;
@@ -13,8 +14,10 @@ public class Client {
     private List<Reservation> reservations; // Liste des réservations
       
     
-    public Client(String id, String nom, String prenom, String email, String telephone) {
+    public Client(int id,int HotelID, String nom, String prenom, String email, String telephone) {
         this.id = id;
+        this.HotelID = HotelID; // ID de l'hôtel auquel le client est associé
+        
         this.nom = nom;
         this.prenom = prenom;
         this.email = email;
@@ -22,17 +25,19 @@ public class Client {
         this.reservations = new ArrayList<>(); 
     }
 
-        // Ajouter une réservation à la liste de réservations du client
-    public void ajouterReservation(Reservation reservation) {
-        reservations.add(reservation);
-    }
+  
 
-     // Get réservations
-     public List<Reservation> getReservations() {
-        return new ArrayList<>(reservations); // Retourne une copie de la liste des réservations
-    }
+   
+
 
      // Getters
+    public int getHotelId() {
+        return HotelID;} // Retourne l'ID de l'hôtel auquel le client est associé
+
+      public int getId() {
+         return id;
+    }
+
      public String getNom() {
         return nom;
     }
@@ -49,7 +54,14 @@ public class Client {
         return telephone;
     }
 
-     // Setters
+    public List<Reservation> getReservations() {
+        return new ArrayList<>(reservations);} // Retourne une copie de la liste des réservations}
+
+     //Setters
+      public void setId(int id) {
+        this.id = id;
+     }
+
      public void setNom(String nom) {
         this.nom = nom;
     }
