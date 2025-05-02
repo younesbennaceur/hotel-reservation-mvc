@@ -3,7 +3,9 @@ package src.Model;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class Client {
+    private String id; 
     private String nom;
     private String prenom;
     private String email;
@@ -11,7 +13,8 @@ public class Client {
     private List<Reservation> reservations; // Liste des réservations
       
     
-    public Client(String nom, String prenom, String email, String telephone) {
+    public Client(String id, String nom, String prenom, String email, String telephone) {
+        this.id = id;
         this.nom = nom;
         this.prenom = prenom;
         this.email = email;
