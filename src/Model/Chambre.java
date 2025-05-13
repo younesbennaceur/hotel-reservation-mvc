@@ -11,7 +11,8 @@ public class Chambre {
     public enum TypeChambre {
         SIMPLE,
         DOUBLE,
-        SUITE
+        SUITE_NORMALE,
+        SUITE_PRESIDENTIELLE
     }
 
     public Chambre(int id, int hotelId, int numero, TypeChambre type, double prix) {

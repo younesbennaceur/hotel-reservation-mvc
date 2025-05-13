@@ -28,7 +28,7 @@ public class Main {
         // Gestion des Chambres
         Chambre newChambre = ChambreController.createChambre(0, 10, Chambre.TypeChambre.DOUBLE, 500);
         System.out.println("First Chambre " + newChambre.getNumero() + " " + newChambre.getPrix());
-        Chambre newChambre2 = ChambreController.createChambre(0, 20, Chambre.TypeChambre.DOUBLE, 500);
+        Chambre newChambre2 = ChambreController.createChambre(2, 20, Chambre.TypeChambre.DOUBLE, 500);
         System.out.println("Second Chambre " + newChambre2.getNumero() + " " + newChambre2.getPrix());
 
         List<Chambre> chambreByHotel = ChambreController.getChambresByHotelId(0);

@@ -1,35 +1,65 @@
 package src.Model;
-import java.util.Date;
+
+import java.time.LocalDate;
 import java.util.List;
 
 public class Reservation {
-    private Date debut;
-    private Date fin;
-    private List<Chambre> chambres; 
-    private Client client;  // Client lié à la réservation
+    private int id;
+    private int clientId;
+    private List<Integer> chambresId; // plusieurs chambres
+    private LocalDate dateDebut;
+    private LocalDate dateFin;
     private boolean annulee;
 
-     // Constructeur
-     public Reservation(Date debut, Date fin, Client client, List<Chambre> chambres) {
-        this.debut = debut;
-        this.fin = fin;
-        this.client = client;
-        this.chambres = chambres;
-        this.annulee = false; // Par défaut la réservation n'est pas annulée
+    public Reservation(int id, int clientId, List<Integer> chambresId, LocalDate dateDebut, LocalDate dateFin) {
+        this.id = id;
+        this.clientId = clientId;
+        this.chambresId = chambresId;
+        this.dateDebut = dateDebut;
+        this.dateFin = dateFin;
+        this.annulee = false;
     }
 
-        // Getters et setters
-    public Date getDateDebut() { return debut; }
-    public Date getDateFin() { return fin; }
-    public Client getClient() { return client; }
-    public List<Chambre> getChambres() { return chambres; }
-    public boolean isAnnulee() { return annulee; }
+    // Getters
+    public int getId() {
+        return id;
+    }
 
-    // Annuler une réservation
+    public int getClientId() {
+        return clientId;
+    }
+
+    public List<Integer> getChambresId() {
+        return chambresId;
+    }
+
+    public LocalDate getDateDebut() {
+        return dateDebut;
+    }
+
+    public LocalDate getDateFin() {
+        return dateFin;
+    }
+
+    public boolean isAnnulee() {
+        return annulee;
+    }
+
+    // Setters
+    public void setDateDebut(LocalDate dateDebut) {
+        this.dateDebut = dateDebut;
+    }
+
+    public void setDateFin(LocalDate dateFin) {
+        this.dateFin = dateFin;
+    }
+
     public void annuler() {
-        annulee = true;
+        this.annulee = true;
     }
 
-    }
+
+}
+
     
 

@@ -11,7 +11,7 @@ public class Client {
     private String prenom;
     private String email;
     private String telephone;
-    private List<Reservation> reservations; // Liste des réservations
+    
       
     
     public Client(int id,int HotelID, String nom, String prenom, String email, String telephone) {
@@ -22,7 +22,7 @@ public class Client {
         this.prenom = prenom;
         this.email = email;
         this.telephone = telephone;
-        this.reservations = new ArrayList<>(); 
+        
     }
 
   
@@ -53,9 +53,6 @@ public class Client {
     public String getTelephone() {
         return telephone;
     }
-
-    public List<Reservation> getReservations() {
-        return new ArrayList<>(reservations);} // Retourne une copie de la liste des réservations}
 
      //Setters
       public void setId(int id) {
