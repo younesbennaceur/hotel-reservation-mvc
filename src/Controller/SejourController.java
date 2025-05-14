@@ -1,13 +1,15 @@
 package src.Controller;
 import src.Model.Sejour;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
 import src.Config.db;
-
+import src.Model.Client;
 import src.Model.Consommation;
 import src.Model.Reservation;
+import src.Model.Chambre;
 
 public class SejourController {
       // Créer un séjour
@@ -81,7 +83,68 @@ public class SejourController {
             }
         }
     }
-}
+
+
+    public static void genererFacture(int sejourId) {
+        Sejour sejour = getSejour(sejourId);
+        if (sejour == null){
+            System.out.println("Séjour introuvable.");
+            return ;
+        }
+        int reservationId = sejour.getReservationId();
+        Reservation reservation = db.getInstance().reservations.get(reservationId);
+         
+        if (reservation == null) {
+        System.out.println("Réservation introuvable.");
+        return;
+         }
+
+         int clientId = reservation.getClientId();
+            Client client = db.getInstance().clients.get(clientId);
+            if (client == null) {
+                System.out.println("Client introuvable.");
+                return;
+            }
+
+            List<Integer> chambresId = reservation.getChambresId();
+
+            System.out.println("\n===== FACTURE =====");
+    System.out.println("Client : " + client.getNom());
+    System.out.println("Séjour du " + sejour.getDateDebut() + " au " +
+        (sejour.getDateFin() != null ? sejour.getDateFin() : "en cours"));
+
+        long nbJours = ChronoUnit.DAYS.between(
+        sejour.getDateDebut(),
+        sejour.getDateFin() != null ? sejour.getDateFin() : LocalDate.now()
+    );
+
+    double totalChambres = 0.0;
+    System.out.println("\n--- Détails des chambres ---");
+    for (int chambreId : chambresId){
+        Chambre chambre = db.getInstance().chambres.get(chambreId);
+        if (chambre != null){
+            double prixChambre = chambre.getPrix();
+            double prix = prixChambre * nbJours;
+            totalChambres += prix;
+            System.out.println("Chambre " + chambre.getNumero() + " : " +
+            chambre.getPrix() + "€ x " + nbJours + " nuits = " + prix + "€");
+        }
+    }
+    double consommationsTotal = ConsommationController.calculerTotalConsommations(sejourId);
+    System.out.println("\n--- Détails des consommations ---");
+    List<Consommation> consommations = ConsommationController.getConsommationsBySejourId(sejourId);
+    for (Consommation consommation : consommations) {
+        System.out.println(consommation.getType() + " : " + consommation.getMontant() + "€");
+    }
+        double total = totalChambres + consommationsTotal;
+        System.out.println("\n--- Total ---");
+        System.out.println("\nTOTAL À PAYER : " + total + "€");
+    System.out.println("============================\n");
+
+
+
+
+}}
 
 
 
