@@ -59,7 +59,7 @@ public class Chambre {
         this.type = typeChambre;
     }
 
-    public void setPrix(int prix) {
+    public void setPrix(double prix) {
         this.prix = prix;
     }
 

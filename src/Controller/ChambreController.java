@@ -12,7 +12,7 @@ public class ChambreController {
     public ChambreController() {
     }
 
-    public static Chambre createChambre(int hotelId, int numero, Chambre.TypeChambre type, int prix) {
+    public static Chambre createChambre(int hotelId, int numero, Chambre.TypeChambre type, Double prix) {
         int id = db.getInstance().chambres.size();
         Chambre chambre = new Chambre(id, hotelId, numero, type, prix);
         db.getInstance().chambres.add(chambre);
@@ -43,7 +43,7 @@ public class ChambreController {
         return result;
     }
 
-    public static Chambre updateChambre(int id, int numero, Chambre.TypeChambre type, int prix, boolean isDisponible) {
+    public static Chambre updateChambre(int id, int numero, Chambre.TypeChambre type, Double prix) {
         if (id < 0 || id >= db.getInstance().chambres.size() || db.getInstance().chambres.get(id) == null) {
             System.out.println("Chambre ID " + id + " not found.");
             return null;

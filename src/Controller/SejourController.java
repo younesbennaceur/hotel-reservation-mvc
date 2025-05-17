@@ -111,7 +111,8 @@ public class SejourController {
     }
 
     public static double genererFacture(int sejourId) {
-    
+    return 000;
+    }
 }
 
-}
+

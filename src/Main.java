@@ -4,9 +4,12 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.swing.SwingUtilities;
+
 import src.Model.Hotel;
 import src.Model.Reservation;
 import src.Model.Sejour;
+import src.View.HotelManagementView;
 import src.Model.Chambre;
 import src.Model.Client;
 
@@ -17,8 +20,16 @@ import src.Controller.ClientController;
 import src.Controller.ConsommationController;
 import src.Controller.SejourController;
 
+
 public class Main {
     public static void main(String[] args) {
+         int defaultHotelId = 1; // You can change this ID based on your app logic or user input
+
+    SwingUtilities.invokeLater(() -> {
+        HotelManagementView view = new HotelManagementView(defaultHotelId);
+        view.setVisible(true);
+    });
+
 
         // Gestion des Hotel
         /*
@@ -87,13 +98,13 @@ public class Main {
          */
         // Gestion des sejours
         
-         
+         /*
          HotelController.createHotel("Hotel de Paris", "123 Rue de Paris");
          ClientController.createClient(0, "Younes", "BENNACEUR",
          "younesbennaceur2004@gmail.com", "0651234567");
-         ChambreController.createChambre(0, 10, Chambre.TypeChambre.DOUBLE, 500);
-         ChambreController.createChambre(0, 20, Chambre.TypeChambre.DOUBLE, 500);
-         ChambreController.createChambre(0, 30, Chambre.TypeChambre.DOUBLE, 500);
+         ChambreController.createChambre(0, 10, Chambre.TypeChambre.DOUBLE, 500.00);
+         ChambreController.createChambre(0, 20, Chambre.TypeChambre.DOUBLE, 500.00);
+         ChambreController.createChambre(0, 30, Chambre.TypeChambre.DOUBLE, 500.00);
          LocalDate dateDebut1 = LocalDate.of(2025, 5, 20);
          LocalDate dateFin1 = LocalDate.of(2025, 5, 25);
          LocalDate dateDebut2 = LocalDate.of(2025, 6, 20);
@@ -123,6 +134,9 @@ public class Main {
          ConsommationController.afficherConsommations(1);
         Double montant = SejourController.genererFacture(0);
         System.out.println("Montant total pour le séjour ID 0 : " + montant + "€");
+          * 
+          */
+         
          
          
          
