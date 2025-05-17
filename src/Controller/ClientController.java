@@ -39,9 +39,10 @@ public class ClientController {
         List<Client> result = new ArrayList<>();
 
         for (Client Client : allClients) {
-            if (Client.getHotelId() == hotelId) {
-                result.add(Client);
-            }
+           
+            if (Client != null && Client.getHotelId() == hotelId) {
+            result.add(Client);
+        }
         }
 
         return result;

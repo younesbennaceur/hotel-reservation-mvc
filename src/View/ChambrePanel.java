@@ -111,30 +111,21 @@ public class ChambrePanel extends JPanel {
     }
 
     private void loadChambreData() {
-        SwingWorker<Void, Void> worker = new SwingWorker<>() {
-            @Override
-            protected Void doInBackground() {
-                tableModel.setRowCount(0);
-                List<Chambre> chambres = ChambreController.getChambresByHotelId(currentHotelId);
-                for (Chambre chambre : chambres) {
-                    if (chambre != null) {
-                        addChambreToTable(chambre);
-                    }
-                }
-                return null;
-            }
-
-            @Override
-            protected void done() {
-                try {
-                    get();
-                } catch (InterruptedException | ExecutionException ex) {
-                    JOptionPane.showMessageDialog(ChambrePanel.this, "Erreur lors du chargement des chambres.", "Erreur", JOptionPane.ERROR_MESSAGE);
+    SwingWorker<Void, Void> worker = new SwingWorker<>() {
+        @Override
+        protected Void doInBackground() {
+            tableModel.setRowCount(0);
+            List<Chambre> chambres = ChambreController.getChambresByHotelId(currentHotelId);
+            for (Chambre chambre : chambres) {
+                if (chambre != null) {
+                    addChambreToTable(chambre);
                 }
             }
-        };
-        worker.execute();
-    }
+            return null;
+        }
+    };
+    worker.execute();
+}
 
     private void addChambreToTable(Chambre chambre) {
         tableModel.addRow(new Object[]{

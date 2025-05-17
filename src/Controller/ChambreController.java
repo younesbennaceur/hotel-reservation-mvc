@@ -31,17 +31,17 @@ public class ChambreController {
     }
 
     public static List<Chambre> getChambresByHotelId(int hotelId) {
-        List<Chambre> allChambres = db.getInstance().chambres;
-        List<Chambre> result = new ArrayList<>();
+    List<Chambre> allChambres = db.getInstance().chambres;
+    List<Chambre> result = new ArrayList<>();
 
-        for (Chambre chambre : allChambres) {
-            if (chambre.getHotelId() == hotelId) {
-                result.add(chambre);
-            }
+    for (Chambre chambre : allChambres) {
+        if (chambre != null && chambre.getHotelId() == hotelId) {
+            result.add(chambre);
         }
-
-        return result;
     }
+
+    return result;
+}
 
     public static Chambre updateChambre(int id, int numero, Chambre.TypeChambre type, Double prix) {
         if (id < 0 || id >= db.getInstance().chambres.size() || db.getInstance().chambres.get(id) == null) {
