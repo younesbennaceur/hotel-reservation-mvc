@@ -18,20 +18,20 @@ public class ClientController {
     }
 
     // Méthode pour créer un client
-    public static Client createClient(int hotelId,String nom, String prenom, String email, String telephone) {
+    public static Client createClient(int hotelId, String nom, String prenom, String email, String telephone) {
         int id = db.getInstance().clients.size(); // ID du client
-        Client client = new Client(id,hotelId, nom, prenom, email, telephone); // Création du client
+        Client client = new Client(id, hotelId, nom, prenom, email, telephone); // Création du client
         db.getInstance().clients.add(client); // Ajout du client à la liste des clients
         return db.getInstance().clients.get(id); // Retourne le client créé
     }
 
     // Méthode pour obtenir un client par son ID
     public static Client getClient(int id) {
-        if (id < 0 || id >= db.getInstance().clients.size()) { 
+        if (id < 0 || id >= db.getInstance().clients.size() || db.getInstance().clients.get(id) == null) {
             System.out.println("Client ID " + id + " not found.");
             return null; // Retourne null si l'ID est invalide
         }
-        return db.getInstance().clients.get(id); 
+        return db.getInstance().clients.get(id);
     }
 
     public static List<Client> getClientsByHotelId(int hotelId) {
@@ -49,19 +49,24 @@ public class ClientController {
 
     // Méthode pour mettre à jour un client
     public static Client updateClient(int id, String nom, String prenom, String email, String telephone) {
-       Client client = db.getInstance().clients.get(id); 
-       client.setNom(nom); 
-       client.setPrenom(prenom); 
-       client.setEmail(email); 
-       client.setTelephone(telephone); 
-       return client; 
+        if (id < 0 || id >= db.getInstance().clients.size() || db.getInstance().clients.get(id) == null) {
+            System.out.println("Client ID " + id + " not found.");
+            return null; // Retourne null si l'ID est invalide
+        }
+        Client client = db.getInstance().clients.get(id);
+        client.setNom(nom);
+        client.setPrenom(prenom);
+        client.setEmail(email);
+        client.setTelephone(telephone);
+        return client;
     }
-    public static String deleteClient(int id) {
-        Client client = db.getInstance().clients.remove(id);
-        return "Clint id: " + client.getId() + " deleted successfully"; 
-    }
-    
 
-    
+    public static String deleteClient(int id) {
+        if (id < 0 || id >= db.getInstance().clients.size() || db.getInstance().clients.get(id) == null) {
+            return "Client ID " + id + " not found."; // Retourne un message d'erreur si l'ID est invalide
+        }
+        Client client = db.getInstance().clients.set(id, null);
+        return "Clint id: " + client.getId() + " deleted successfully";
+    }
 
 }

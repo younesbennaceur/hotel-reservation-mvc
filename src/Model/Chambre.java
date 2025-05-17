@@ -6,7 +6,6 @@ public class Chambre {
     private int numero;
     private TypeChambre type;
     private double prix;
-    private boolean disponible;
 
     public enum TypeChambre {
         SIMPLE,
@@ -21,7 +20,6 @@ public class Chambre {
         this.numero = numero;
         this.type = type;
         this.prix = prix;
-        this.disponible = true;
     }
 
     public int getId() {
@@ -44,14 +42,11 @@ public class Chambre {
         return prix;
     }
 
-    public boolean isDisponible() {
-        return disponible;
-    }
 
     public void setId(int id) {
         this.id = id;
     }
-    
+
     public void setHotelId(int hotelId) {
         this.hotelId = id;
     }
@@ -68,7 +63,5 @@ public class Chambre {
         this.prix = prix;
     }
 
-    public void setDisponible(boolean disponible) {
-        this.disponible = disponible;
-    }
+    
 }

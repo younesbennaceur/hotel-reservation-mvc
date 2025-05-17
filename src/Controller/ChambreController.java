@@ -22,7 +22,7 @@ public class ChambreController {
     public static Chambre getChambre(int id) {
         List<Chambre> chambres = db.getInstance().chambres;
 
-        if (id < 0 || id >= chambres.size()) {
+        if (id < 0 || id >= chambres.size() || db.getInstance().chambres.get(id) == null) {
             System.out.println("Chambre ID " + id + " not found.");
             return null;
         }
@@ -44,16 +44,23 @@ public class ChambreController {
     }
 
     public static Chambre updateChambre(int id, int numero, Chambre.TypeChambre type, int prix, boolean isDisponible) {
+        if (id < 0 || id >= db.getInstance().chambres.size() || db.getInstance().chambres.get(id) == null) {
+            System.out.println("Chambre ID " + id + " not found.");
+            return null;
+        }
         Chambre chambre = db.getInstance().chambres.get(id);
         chambre.setNumbero(numero);
         chambre.setType(type);
         chambre.setPrix(prix);
-        chambre.setDisponible(isDisponible);
+        
         return chambre;
     }
 
     public static String deleteChambre(int id) {
-        Chambre chambre = db.getInstance().chambres.remove(id);
+        if (id < 0 || id >= db.getInstance().chambres.size() || db.getInstance().chambres.get(id) == null) {
+            return "Chambre ID " + id + " not found.";
+        }
+        Chambre chambre = db.getInstance().chambres.set(id, null);
         return "Chambre id: " + chambre.getId() + " deleted succefully";
     }
 }

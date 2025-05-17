@@ -1,4 +1,5 @@
 package src.Controller;
+
 import src.Model.Sejour;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -12,8 +13,8 @@ import src.Model.Reservation;
 import src.Model.Chambre;
 
 public class SejourController {
-      // Créer un séjour
-    public static Sejour creerSejour(int reservationId) {
+    // Créer un séjour
+    public static Sejour createSejour(int reservationId) {
         Reservation reservation = db.getInstance().reservations.get(reservationId);
         if (reservation == null) {
             System.out.println("Réservation introuvable.");
@@ -23,21 +24,24 @@ public class SejourController {
         LocalDate dateDebut = reservation.getDateDebut();
         LocalDate dateFin = null;
 
+        Sejour sejour = new Sejour(id, reservationId, dateDebut, dateFin);
 
-        Sejour sejour = new Sejour ( id, reservationId, dateDebut, dateFin);
+        db.getInstance().sejours.add(sejour);
 
-        db.getInstance().sejours.add(sejour);  // Utilisation de add au lieu de put
-
-        System.out.println("Séjour créé avec ID : " + sejour.getId());
+        System.out.println("Séjour créé avec ID : " + sejour.getId() +
+                " | Réservation ID : " + reservationId +
+                " | Date de début : " + dateDebut);
         return sejour;
 
     }
-  
+
     // Obtenir un séjour par son ID
     public static Sejour getSejour(int id) {
-        if (id < 0 || id >= db.getInstance().sejours.size()) {
+        if (id < 0 || id >= db.getInstance().sejours.size() || db.getInstance().sejours.get(id) == null) {
             System.out.println("Séjour introuvable.");
             return null;
+        }else {
+            System.out.println("Séjour trouvé avec ID : " + id);
         }
         return db.getInstance().sejours.get(id);
     }
@@ -45,18 +49,24 @@ public class SejourController {
     public static Sejour getSejourByReservationId(int reservationId) {
         for (Sejour sejour : db.getInstance().sejours) {
             if (sejour.getReservationId() == reservationId) {
+                System.out.println("Séjour trouvé avec ID de réservation : " + reservationId);
+                System.out.println("Séjour ID : " + sejour.getId());
                 return sejour;
             }
+           
         }
         return null;
     }
 
     public static void terminerSejour(int id) {
         Sejour sejour = getSejour(id);
-        if(sejour != null) {
+        if (sejour != null) {
             LocalDate dateFin = LocalDate.now();
             sejour.setDateFin(dateFin);
+            
+            supprimerSejour(id);
             System.out.println("Séjour terminé avec succès.");
+            System.out.println("Date de fin : " + dateFin);
         } else {
             System.out.println("Séjour introuvable.");
         }
@@ -67,10 +77,12 @@ public class SejourController {
             System.out.println("Séjour introuvable.");
             return;
         }
-        db.getInstance().sejours.remove(id);
+        db.getInstance().sejours.set(id, null);
         System.out.println("Séjour supprimé avec succès.");
+
     }
-     // Afficher tous les séjours
+
+    // Afficher tous les séjours
     public static void afficherTousLesSejours() {
         List<Sejour> sejours = db.getInstance().sejours;
         if (sejours.isEmpty()) {
@@ -84,67 +96,51 @@ public class SejourController {
         }
     }
 
-
-    public static void genererFacture(int sejourId) {
-        Sejour sejour = getSejour(sejourId);
-        if (sejour == null){
-            System.out.println("Séjour introuvable.");
-            return ;
-        }
-        int reservationId = sejour.getReservationId();
+    public static void sejourner(int reservationId) {
         Reservation reservation = db.getInstance().reservations.get(reservationId);
-         
         if (reservation == null) {
-        System.out.println("Réservation introuvable.");
-        return;
-         }
-
-         int clientId = reservation.getClientId();
-            Client client = db.getInstance().clients.get(clientId);
-            if (client == null) {
-                System.out.println("Client introuvable.");
-                return;
-            }
-
-            List<Integer> chambresId = reservation.getChambresId();
-
-            System.out.println("\n===== FACTURE =====");
-    System.out.println("Client : " + client.getNom());
-    System.out.println("Séjour du " + sejour.getDateDebut() + " au " +
-        (sejour.getDateFin() != null ? sejour.getDateFin() : "en cours"));
-
-        long nbJours = ChronoUnit.DAYS.between(
-        sejour.getDateDebut(),
-        sejour.getDateFin() != null ? sejour.getDateFin() : LocalDate.now()
-    );
-
-    double totalChambres = 0.0;
-    System.out.println("\n--- Détails des chambres ---");
-    for (int chambreId : chambresId){
-        Chambre chambre = db.getInstance().chambres.get(chambreId);
-        if (chambre != null){
-            double prixChambre = chambre.getPrix();
-            double prix = prixChambre * nbJours;
-            totalChambres += prix;
-            System.out.println("Chambre " + chambre.getNumero() + " : " +
-            chambre.getPrix() + "€ x " + nbJours + " nuits = " + prix + "€");
+            System.out.println("Réservation introuvable.");
+            return;
+        }
+        Sejour sejour = createSejour(reservationId);
+        if (sejour != null) {
+            System.out.println("Séjour créé avec succès.");
+        } else {
+            System.out.println("Erreur lors de la création du séjour.");
         }
     }
-    double consommationsTotal = ConsommationController.calculerTotalConsommations(sejourId);
-    System.out.println("\n--- Détails des consommations ---");
-    List<Consommation> consommations = ConsommationController.getConsommationsBySejourId(sejourId);
-    for (Consommation consommation : consommations) {
-        System.out.println(consommation.getType() + " : " + consommation.getMontant() + "€");
+
+    public static double genererFacture(int sejourId) {
+    Sejour sejour = getSejour(sejourId);
+    if (sejour == null) {
+        return 0.0;
     }
-        double total = totalChambres + consommationsTotal;
-        System.out.println("\n--- Total ---");
-        System.out.println("\nTOTAL À PAYER : " + total + "€");
-    System.out.println("============================\n");
 
+    LocalDate dateDebut = sejour.getDateDebut();
+    LocalDate dateFin = sejour.getDateFin() != null ? sejour.getDateFin() : LocalDate.now();
 
+    long nbNuits = ChronoUnit.DAYS.between(dateDebut, dateFin);
+    if (nbNuits <= 0) nbNuits = 1; // minimum 1 nuit
 
+    Reservation reservation = db.getInstance().reservations.get(sejour.getReservationId());
+    if (reservation == null) {
+        return 0.0;
+    }
 
-}}
+    // Calcul du prix des chambres
+    double totalChambres = 0.0;
+    for (int chambreId : reservation.getChambresId()) {
+        Chambre chambre = db.getInstance().chambres.get(chambreId);
+        if (chambre != null) {
+            totalChambres += chambre.getPrix() * nbNuits;
+        }
+    }
 
+    // Calcul des consommations
+    double totalConsommations = ConsommationController.calculerTotalConsommations(sejourId);
 
+    // Total à payer
+    return totalChambres + totalConsommations;
+}
 
+}

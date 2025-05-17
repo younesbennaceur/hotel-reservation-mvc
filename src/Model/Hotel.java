@@ -7,20 +7,14 @@ public class Hotel {
   private int id;
   private String nom;
   private String adresse;
-  
-
 
   public Hotel(int id, String nom, String adresse) {
     this.id = id;
     this.nom = nom;
     this.adresse = adresse;
-    
-  }
-  
 
- 
-  
-  
+  }
+
   public void setNom(String nom) {
     this.nom = nom;
   }

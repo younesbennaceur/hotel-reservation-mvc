@@ -31,6 +31,10 @@ public class HotelController {
    }
 
    public static Hotel updateHotel(int id, String nom, String adresse) {
+      if (id < 0 || id >= db.getInstance().hotels.size() || db.getInstance().hotels.get(id) == null) {
+         System.out.println("Hotel ID " + id + " not found.");
+         return null;
+      }
       Hotel hotel = db.getInstance().hotels.get(id);
       hotel.setNom(nom);
       hotel.setAdresse(adresse);
@@ -38,6 +42,9 @@ public class HotelController {
    }
 
    public static String deleteHotel(int id) {
+      if (id < 0 || id >= db.getInstance().hotels.size() || db.getInstance().hotels.get(id) == null) {
+         return "Hotel ID " + id + " not found.";
+      }
       Hotel hotel = db.getInstance().hotels.remove(id);
       return "Hotel id: " + hotel.getId() + " deleted succefully";
    }

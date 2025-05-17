@@ -5,21 +5,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Sejour {
-     private int id;
+    private int id;
     private int reservationId;
     private LocalDate dateDebut;
     private LocalDate dateFin;
-    
 
-     public Sejour(int id, int reservationId, LocalDate dateDebut, LocalDate dateFin) {
+    public Sejour(int id, int reservationId, LocalDate dateDebut, LocalDate dateFin) {
         this.id = id;
         this.reservationId = reservationId;
         this.dateDebut = dateDebut;
         this.dateFin = dateFin;
     }
 
-
-  public int getId() {
+    public int getId() {
         return id;
     }
 
@@ -38,20 +36,17 @@ public class Sejour {
     public void setId(int id) {
         this.id = id;
     }
+
     public void setReservationId(int reservationId) {
         this.reservationId = reservationId;
     }
+
     public void setDateDebut(LocalDate dateDebut) {
         this.dateDebut = dateDebut;
     }
+
     public void setDateFin(LocalDate dateFin) {
         this.dateFin = dateFin;
     }
-   
 
-
-
-
-    
-    
 }

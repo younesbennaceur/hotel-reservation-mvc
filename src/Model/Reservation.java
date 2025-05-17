@@ -58,8 +58,4 @@ public class Reservation {
         this.annulee = true;
     }
 
-
 }
-
-    
-
