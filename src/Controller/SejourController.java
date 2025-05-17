@@ -111,36 +111,7 @@ public class SejourController {
     }
 
     public static double genererFacture(int sejourId) {
-    Sejour sejour = getSejour(sejourId);
-    if (sejour == null) {
-        return 0.0;
-    }
-
-    LocalDate dateDebut = sejour.getDateDebut();
-    LocalDate dateFin = sejour.getDateFin() != null ? sejour.getDateFin() : LocalDate.now();
-
-    long nbNuits = ChronoUnit.DAYS.between(dateDebut, dateFin);
-    if (nbNuits <= 0) nbNuits = 1; // minimum 1 nuit
-
-    Reservation reservation = db.getInstance().reservations.get(sejour.getReservationId());
-    if (reservation == null) {
-        return 0.0;
-    }
-
-    // Calcul du prix des chambres
-    double totalChambres = 0.0;
-    for (int chambreId : reservation.getChambresId()) {
-        Chambre chambre = db.getInstance().chambres.get(chambreId);
-        if (chambre != null) {
-            totalChambres += chambre.getPrix() * nbNuits;
-        }
-    }
-
-    // Calcul des consommations
-    double totalConsommations = ConsommationController.calculerTotalConsommations(sejourId);
-
-    // Total à payer
-    return totalChambres + totalConsommations;
+    
 }
 
 }
