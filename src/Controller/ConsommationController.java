@@ -1,6 +1,7 @@
 package src.Controller;
 
-import src.Config.db;
+
+import src.config.*;
 import src.Model.Client;
 import src.Model.Consommation;
 import src.Model.Sejour;

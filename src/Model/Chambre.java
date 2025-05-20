@@ -62,6 +62,9 @@ public class Chambre {
     public void setPrix(double prix) {
         this.prix = prix;
     }
-
+@Override
+public String toString() {
+    return "Chambre " + numero+ " (" + type + ")"; 
+}
     
 }

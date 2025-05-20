@@ -48,5 +48,10 @@ public class Sejour {
     public void setDateFin(LocalDate dateFin) {
         this.dateFin = dateFin;
     }
+@Override
+public String toString() {
+    return "Séjour #" + id + " (du " + dateDebut + " au " + (dateFin != null ? dateFin : "en cours") + ")";
+}
+
 
 }

@@ -4,7 +4,7 @@ import src.Model.Hotel;
 
 import java.util.List;
 
-import src.Config.db;
+import src.config.db;
 
 public class HotelController {
    private Hotel hotel;

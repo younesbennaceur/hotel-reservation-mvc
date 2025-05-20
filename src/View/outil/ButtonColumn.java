@@ -10,10 +10,7 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 import javax.swing.Action;
-/**
- * The ButtonColumn class provides a button in a specified column of a JTable.
- * When clicked, it triggers a custom action.
- */
+
 public class ButtonColumn extends AbstractCellEditor implements TableCellRenderer, TableCellEditor, ActionListener {
     private static final long serialVersionUID = 1L;
 
@@ -24,15 +21,15 @@ public class ButtonColumn extends AbstractCellEditor implements TableCellRendere
     private Action action;
 
     /**
-     * Create the ButtonColumn with a specific action and column index.
+     * 
      *
-     * @param table   The JTable containing the column
-     * @param action  The action to perform when the button is clicked
-     * @param column  The column index where the button should appear
+     * @param table   
+     * @param action  
+     * @param column  
      */
     public ButtonColumn(JTable table, Action action, int column) {
         this.action = action;
-        this.text = ""; // Default empty text
+        this.text = ""; 
 
         renderButton = new JButton();
         editButton = new JButton();
@@ -45,10 +42,10 @@ public class ButtonColumn extends AbstractCellEditor implements TableCellRendere
     }
 
     /**
-     * Set the text shown on the buttons in this column.
+     * 
      *
-     * @param text Text to display on buttons
-     * @return this instance for chaining
+     * @param text 
+     * @return 
      */
     public ButtonColumn setText(String text) {
         this.text = text;
@@ -67,9 +64,9 @@ public class ButtonColumn extends AbstractCellEditor implements TableCellRendere
             row = Integer.parseInt(editButton.getText());
         }
 
-        // Invoke the action with the row number as the command string
+        
         action.actionPerformed(new ActionEvent(tableModel, ActionEvent.ACTION_PERFORMED, String.valueOf(row)));
-        fireEditingStopped(); // Stops cell editing
+        fireEditingStopped(); 
     }
 
     /**

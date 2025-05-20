@@ -1,4 +1,4 @@
-package src.Config;
+package src.config;
 
 import src.Model.Hotel;
 import java.util.ArrayList;
@@ -8,7 +8,7 @@ import src.Model.Client;
 import src.Model.Consommation;
 import src.Model.Reservation;
 import src.Model.Sejour;
-
+import src.Model.Facture;
 public class db {
 
     private static final db instance = new db();
@@ -19,6 +19,7 @@ public class db {
     public List<Client> clients = new ArrayList<>();
     public List<Sejour> sejours = new ArrayList<>();
     public List<Consommation> consommations = new ArrayList<>();
+    public List<Facture> factures = new ArrayList<>();
 
 
     private db() {

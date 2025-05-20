@@ -1,11 +1,13 @@
 package src.Controller;
 
 import src.Model.Chambre;
+import src.Model.Reservation;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import src.Config.db;
+import src.config.*;
 
 public class ChambreController {
 
@@ -62,5 +64,56 @@ public class ChambreController {
         }
         Chambre chambre = db.getInstance().chambres.set(id, null);
         return "Chambre id: " + chambre.getId() + " deleted succefully";
+    }
+    public static List<Chambre> getAllChambres() {
+        List<Chambre> chambres = new ArrayList<>();
+        for (Chambre chambre : db.getInstance().chambres) {
+            if (chambre != null) {
+                chambres.add(chambre);
+            }
+        }
+        return chambres;
+    }
+    public static List<Chambre> getChambresDisponibles(LocalDate dateDebut, LocalDate dateFin) {
+        List<Chambre> chambresDisponibles = new ArrayList<>();
+
+        for (Chambre chambre : db.getInstance().chambres) {
+            if (chambre == null) continue;
+
+            boolean estDisponible = true;
+
+            for (Reservation reservation : db.getInstance().reservations) {
+                if (reservation == null) continue;
+
+                if (reservation.getChambresId().contains(chambre.getId())) {
+                    // Test de chevauchement des dates
+                    boolean chevauchement = reservation.getDateDebut().isBefore(dateFin)
+                            && reservation.getDateFin().isAfter(dateDebut);
+
+                    if (chevauchement) {
+                        estDisponible = false;
+                        break;
+                    }
+                }
+            }
+
+            if (estDisponible) {
+                chambresDisponibles.add(chambre);
+            }
+        }
+        if (chambresDisponibles.isEmpty()) {
+            System.out.println("Aucune chambre disponible pour la période demandée.");
+        } else {
+            System.out.println("Chambres disponibles :");
+            for (Chambre chambre : chambresDisponibles) {
+                System.out.println("Chambre ID : " + chambre.getId() +
+                        " | Type : " + chambre.getType() +
+                        " | Prix : " + chambre.getPrix() + "€");
+            }
+        }
+
+         
+
+        return chambresDisponibles;
     }
 }

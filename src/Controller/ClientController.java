@@ -1,13 +1,13 @@
+
+
 package src.Controller;
 
 import src.Model.Hotel;
 import src.Model.Client;
-import src.Model.Client;
+import src.config.*;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import src.Config.db; // Importation de la classe db pour accéder à la base de données
 
 public class ClientController {
     private Hotel hotel; // Référence à l'hôtel
@@ -68,6 +68,16 @@ public class ClientController {
         }
         Client client = db.getInstance().clients.set(id, null);
         return "Clint id: " + client.getId() + " deleted successfully";
+    }
+    // Méthode pour obtenir tous les clients
+    public static List<Client> getAllClients() {
+        List<Client> clients = new ArrayList<>();
+        for (Client client : db.getInstance().clients) {
+            if (client != null) {
+                clients.add(client);
+            }
+        }
+        return clients;
     }
 
 }

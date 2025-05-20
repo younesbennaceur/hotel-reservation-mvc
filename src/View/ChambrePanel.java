@@ -7,12 +7,14 @@ import src.Controller.ChambreController;
 import src.Model.Chambre;
 import java.awt.*;
 import java.awt.event.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 public class ChambrePanel extends JPanel {
     private JTable chambreTable;
-    private JTextField searchChambreField;
+    private JTextField dateDebutField;
+    private JTextField dateFinField;
     private JButton searchChambreButton;
     private JButton addChambreButton;
     private JButton refreshButton;
@@ -27,17 +29,22 @@ public class ChambrePanel extends JPanel {
     }
 
     private void initializeComponents() {
-        searchChambreField = new JTextField(15);
-        searchChambreButton = new JButton("Rechercher");
+        dateDebutField = new JTextField(8);
+        dateFinField = new JTextField(8);
+        searchChambreButton = new JButton("Rechercher Disponibilité");
         addChambreButton = new JButton("Ajouter Chambre");
         refreshButton = new JButton(new ImageIcon("refresh.png"));
         refreshButton.setToolTipText("Actualiser");
 
         JPanel topPanel = new JPanel(new BorderLayout());
         JPanel centerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        centerPanel.add(new JLabel("Chercher chambre:"));
-        centerPanel.add(searchChambreField);
+
+        centerPanel.add(new JLabel("Date Début (YYYY-MM-DD):"));
+        centerPanel.add(dateDebutField);
+        centerPanel.add(new JLabel("Date Fin (YYYY-MM-DD):"));
+        centerPanel.add(dateFinField);
         centerPanel.add(searchChambreButton);
+
         topPanel.add(centerPanel, BorderLayout.CENTER);
 
         JPanel rightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
@@ -89,8 +96,9 @@ public class ChambrePanel extends JPanel {
 
     private void addActionListeners() {
         addChambreButton.addActionListener(e -> showAddChambreDialog());
-        searchChambreButton.addActionListener(e -> searchChambre());
         refreshButton.addActionListener(e -> loadChambreData());
+
+        searchChambreButton.addActionListener(e -> searchChambreDisponible());
 
         Action modifyAction = new AbstractAction() {
             public void actionPerformed(ActionEvent e) {
@@ -111,21 +119,21 @@ public class ChambrePanel extends JPanel {
     }
 
     private void loadChambreData() {
-    SwingWorker<Void, Void> worker = new SwingWorker<>() {
-        @Override
-        protected Void doInBackground() {
-            tableModel.setRowCount(0);
-            List<Chambre> chambres = ChambreController.getChambresByHotelId(currentHotelId);
-            for (Chambre chambre : chambres) {
-                if (chambre != null) {
-                    addChambreToTable(chambre);
+        SwingWorker<Void, Void> worker = new SwingWorker<>() {
+            @Override
+            protected Void doInBackground() {
+                tableModel.setRowCount(0);
+                List<Chambre> chambres = ChambreController.getChambresByHotelId(currentHotelId);
+                for (Chambre chambre : chambres) {
+                    if (chambre != null) {
+                        addChambreToTable(chambre);
+                    }
                 }
+                return null;
             }
-            return null;
-        }
-    };
-    worker.execute();
-}
+        };
+        worker.execute();
+    }
 
     private void addChambreToTable(Chambre chambre) {
         tableModel.addRow(new Object[]{
@@ -256,26 +264,42 @@ public class ChambrePanel extends JPanel {
         }
     }
 
-    private void searchChambre() {
-        String searchText = searchChambreField.getText().trim().toLowerCase();
-        if (searchText.isEmpty()) {
-            loadChambreData();
+    private void searchChambreDisponible() {
+        String dateDebutStr = dateDebutField.getText().trim();
+        String dateFinStr = dateFinField.getText().trim();
+
+        if (dateDebutStr.isEmpty() || dateFinStr.isEmpty()) {
+            showError("Veuillez saisir les dates de début et de fin.");
             return;
         }
 
-        tableModel.setRowCount(0);
-        List<Chambre> chambres = ChambreController.getChambresByHotelId(currentHotelId);
+        LocalDate dateDebut;
+        LocalDate dateFin;
 
-        for (Chambre chambre : chambres) {
-            if (chambre != null && matchesSearch(chambre, searchText)) {
+        try {
+            dateDebut = LocalDate.parse(dateDebutStr);
+            dateFin = LocalDate.parse(dateFinStr);
+        } catch (DateTimeParseException e) {
+            showError("Format de date invalide. Utilisez YYYY-MM-DD.");
+            return;
+        }
+
+        if (!dateDebut.isBefore(dateFin)) {
+            showError("La date de début doit être avant la date de fin.");
+            return;
+        }
+
+        List<Chambre> chambresDisponibles = ChambreController.getChambresDisponibles(dateDebut, dateFin);
+
+        tableModel.setRowCount(0);
+        for (Chambre chambre : chambresDisponibles) {
+            if (chambre != null) {
                 addChambreToTable(chambre);
             }
         }
-    }
 
-    private boolean matchesSearch(Chambre chambre, String searchText) {
-        return String.valueOf(chambre.getNumero()).toLowerCase().contains(searchText) ||
-               chambre.getType().toString().toLowerCase().contains(searchText) ||
-               String.valueOf(chambre.getPrix()).contains(searchText);
+        if (tableModel.getRowCount() == 0) {
+            JOptionPane.showMessageDialog(this, "Aucune chambre disponible pour ces critères.", "Information", JOptionPane.INFORMATION_MESSAGE);
+        }
     }
 }

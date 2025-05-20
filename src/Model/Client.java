@@ -67,4 +67,8 @@ public class Client {
     public void setTelephone(String telephone) {
         this.telephone = telephone;
     }
+    @Override
+public String toString() {
+    return nom + " " + prenom; // Exemple : "John Doe"
+}
 }

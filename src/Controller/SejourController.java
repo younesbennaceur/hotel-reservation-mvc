@@ -6,7 +6,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
-import src.Config.db;
+import src.config.db;
 import src.Model.Client;
 import src.Model.Consommation;
 import src.Model.Reservation;
@@ -72,15 +72,19 @@ public class SejourController {
         }
     }
 
-    public static void supprimerSejour(int id) {
-        if (id < 0 || id >= db.getInstance().sejours.size()) {
-            System.out.println("Séjour introuvable.");
-            return;
+   public static String supprimerSejour(int id) {
+    List<Sejour> sejours = db.getInstance().sejours;
+    for (int i = 0; i < sejours.size(); i++) {
+        Sejour s = sejours.get(i);
+        if (s != null && s.getId() == id) {
+            db.getInstance().sejours.set(i, null);
+            return "Séjour supprimé avec succès.";
         }
-        db.getInstance().sejours.set(id, null);
-        System.out.println("Séjour supprimé avec succès.");
-
     }
+    return "Séjour introuvable.";
+}
+
+
 
     // Afficher tous les séjours
     public static void afficherTousLesSejours() {
@@ -113,6 +117,9 @@ public class SejourController {
     public static double genererFacture(int sejourId) {
     return 000;
     }
+    public static List<Sejour> getAllSejours() {
+    return db.getInstance().sejours;
 }
 
+}
 

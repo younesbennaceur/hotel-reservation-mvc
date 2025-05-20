@@ -70,4 +70,3 @@ public class Consommation {
               // 3. use the get reservation by chambre id and date range
               // 4. if the reservation is not in the date range, then the chambre is available
               // 5. create the reservation
-

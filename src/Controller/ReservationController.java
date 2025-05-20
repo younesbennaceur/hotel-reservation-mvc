@@ -3,7 +3,7 @@ package src.Controller;
 import src.Model.Reservation;
 import src.Model.Chambre;
 import src.Model.Client;
-import src.Config.db;
+import src.config.db;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -46,15 +46,19 @@ public class ReservationController {
         return null;
     }
 
-    public static Reservation suprimReservation(int id) {
-        if (id < 0 || id >= db.getInstance().reservations.size() || db.getInstance().reservations.get(id) == null) {
-            System.out.println("Réservation introuvable.");
-            return null;
+public static String suprimReservation(int id) {
+   List<Reservation> reservations = db.getInstance().reservations;
+    for (int i = 0; i < reservations.size(); i++) {
+        Reservation r = reservations.get(i);
+        if (r != null && r.getId() == id) {
+            db.getInstance().reservations.set(i, null);
+            return "Réservation supprimée avec succès.";
         }
-        Reservation reservation = db.getInstance().reservations.set(id, null);
-        System.out.println("Réservation supprimée avec succès.");
-        return reservation;
     }
+    return "Réservation introuvable.";
+}
+
+
 
     // get reservations by chambre id
     public static List<Reservation> getReservationsByChambreId(int chambreId) {
@@ -98,4 +102,17 @@ public class ReservationController {
         }
         return reservations;
     }
+    public static List<Reservation> getReservationsByHotelId(int hotelId) {
+    List<Reservation> allReservations = db.getInstance().reservations;
+    List<Reservation> result = new ArrayList<>();
+
+    for (Reservation reservation : allReservations) {
+        if (reservation != null ) {
+            result.add(reservation);
+        }
+    }
+
+    return result;
+}
+   
 }
